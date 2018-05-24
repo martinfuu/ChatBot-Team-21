@@ -1,0 +1,13 @@
+Understanding the merge process
+
+Push -> Use your own branch to commit to master branch
+	This will ensure the master branch is updated and will notify everyone
+	with the change.
+
+Pull -> Use your own branch to pull from master branch
+	This will ensure that your branch is updated with the master branch,
+	ensuring the code is not outdated.
+
+Notification -> To ensure everyone is on the same code, the member whos pushing
+		to the master branch must notify the team. This co-ordinates
+ 		everyone else to update their branch when the master branch has been updated.

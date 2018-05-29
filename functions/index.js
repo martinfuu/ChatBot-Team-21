@@ -38,24 +38,10 @@ exports.webhook = functions.https.onRequest((request, response) => {
                 speech = 'The paper ' +paper +' does not exist in our database: \n';
                 agent.add(speech);
             });
-      		console.log(speech);
-        	//agent.add(speech);
+        	agent.add(speech);
     }
-
-    let intentMap = new Map(); 
-    intentMap.set('Requirements', requirements);
-    agent.handleRequest(intentMap);
-
-    /*switch(action)
-    {
-        case 'show-requirements':
-
-        
-
-        break;
-
-        case 'show-possibilities':
-
+    
+    function failure(agent){
         var output = [];
         var speech = '';
         db.collection('papers').get()
@@ -93,7 +79,100 @@ exports.webhook = functions.https.onRequest((request, response) => {
                     speech: speech
                 });
             });
+    }
+    
+    function majors(agent)
+    {
+        var upper = agent.parameters.majors;
+        var major = upper.toLowerCase();
+        if(major == 'software dev')
+        {
+            major = 'software development';
+        }
+        else if(major == 'comp intelligence' || major == 'computer intelligence'||
+        major == 'com intelligence')
+        {
+            major = 'computational intelligence';
+        }
+        else if(major == 'comp science' || major == 'comp science' || major == 'com sci'
+        || major == 'comp sci')
+        {
+            major = 'computer science';
+        }
+        else if(major == 'service science')
+        {
+            major = 'it service science';
+        }
+        else if(major == 'networking' || major == 'security' || major == 'network and security')
+        {
+            major = 'networks and security';
+        }
+        var speech = '';
+        var send = '';
+        switch(major)
+        {
+            case 'software development':
+            send = new Card({
+                title: 'Software Development',
+                imageUrl: 'https://i.imgur.com/pZuEBF5.png',
+                text: 'Papers for Software Development',
+                buttonText: 'More Information',
+                buttonUrl: 'https://www.aut.ac.nz/study/study-options/engineering-computer-and-mathematical-sciences/courses/bachelor-of-computer-and-information-sciences/software-development-major'
+              });
+            break;
+            case 'analytics':
+            send = new Card({
+                title: 'Analytics',
+                imageUrl: 'https://i.imgur.com/sqvVuKa.png',
+                text: 'Papers for Analytics',
+                buttonText: 'More Information',
+                buttonUrl: 'https://www.aut.ac.nz/study/study-options/engineering-computer-and-mathematical-sciences/courses/bachelor-of-computer-and-information-sciences/analytics-major'
+              });
+            break;
+            case 'computational intelligence':
+            send = new Card({
+                title: 'Computational Intelligence',
+                imageUrl: 'https://i.imgur.com/SC3o04o.png',
+                text: 'Papers for Computational Intelligence',
+                buttonText: 'More Information',
+                buttonUrl: 'https://www.aut.ac.nz/study/study-options/engineering-computer-and-mathematical-sciences/courses/bachelor-of-computer-and-information-sciences/computational-intelligence-major'
+              });
+            break;
+            case 'computer science':
+            send = new Card({
+                title: 'Computer Science',
+                imageUrl: 'https://i.imgur.com/QEjzMU7.png',
+                text: 'Papers for Computer Science',
+                buttonText: 'More Information',
+                buttonUrl: 'https://www.aut.ac.nz/study/study-options/engineering-computer-and-mathematical-sciences/courses/bachelor-of-computer-and-information-sciences/computer-science-major'
+              });
+            break;
+            case 'it service science':
+            send = new Card({
+                title: 'IT Service Science',
+                imageUrl: 'https://i.imgur.com/haSwM5D.png',
+                text: 'Papers for IT Service Science',
+                buttonText: 'More Information',
+                buttonUrl: 'https://www.aut.ac.nz/study/study-options/engineering-computer-and-mathematical-sciences/courses/bachelor-of-computer-and-information-sciences/it-service-science-major'
+              });
+            break;
+            case 'networks and security':
+            send = new Card({
+                title: 'Networks and Security',
+                imageUrl: 'https://i.imgur.com/IPrJsFO.png',
+                text: 'Papers for Networks and Security',
+                buttonText: 'More Information',
+                buttonUrl: 'https://www.aut.ac.nz/study/study-options/engineering-computer-and-mathematical-sciences/courses/bachelor-of-computer-and-information-sciences/networks-and-security-major'
+              });
+            break;
+        }
+        agent.add(send);
+    }
 
-        break;
-    }*/
+    let intentMap = new Map(); 
+    intentMap.set('Requirements', requirements);
+    intentMap.set('Semester paper', semester);
+    intentMap.set('Failed', failure);
+    intentMap.set('Major papers', majors);
+    agent.handleRequest(intentMap);
 });
